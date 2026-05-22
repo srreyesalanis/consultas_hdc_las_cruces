@@ -91,7 +91,7 @@ else:
 
     st.metric(
         label="Handicap Actual",
-        value="Aún no tiene el minimo de registros"
+        value="5 (Temporal)"
     )
 
 # --------------------------------------------------
