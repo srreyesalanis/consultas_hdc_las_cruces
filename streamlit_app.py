@@ -2,6 +2,17 @@ import streamlit as st
 import pandas as pd
 from supabase import create_client
 
+st.markdown(
+    """
+    <style>
+    .block-container {
+        padding-top: 2rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # --------------------------------------------------
 # CONFIGURACION PAGINA
 # --------------------------------------------------
