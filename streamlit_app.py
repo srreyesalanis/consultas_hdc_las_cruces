@@ -67,9 +67,7 @@ player_id = selected_player["id"]
 # HANDICAP ACTUAL
 # --------------------------------------------------
 
-st.metric(
-    label="Handicap Actual",
-    handicap = selected_player["current_handicap"]
+handicap = selected_player["current_handicap"]
 
 if handicap is not None:
 
@@ -84,7 +82,6 @@ else:
         label="Handicap Actual",
         value="N/A"
     )
-)
 
 # --------------------------------------------------
 # ULTIMAS RONDAS
