@@ -69,7 +69,21 @@ player_id = selected_player["id"]
 
 st.metric(
     label="Handicap Actual",
-    value=round(selected_player["current_handicap"], 1)
+    handicap = selected_player["current_handicap"]
+
+if handicap is not None:
+
+    st.metric(
+        label="Handicap Actual",
+        value=round(float(handicap), 1)
+    )
+
+else:
+
+    st.metric(
+        label="Handicap Actual",
+        value="N/A"
+    )
 )
 
 # --------------------------------------------------
