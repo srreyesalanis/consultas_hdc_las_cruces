@@ -32,13 +32,20 @@ st.markdown("Consulta pública de jugadores")
 # OBTENER JUGADORES
 # --------------------------------------------------
 
-players_response = (
-    supabase
-    .table("players")
-    .select("id, name, handicap_index")
-    .order("name")
-    .execute()
-)
+try:
+
+    players_response = (
+        supabase
+        .table("players")
+        .select("id, name, handicap_index")
+        .order("name")
+        .execute()
+    )
+
+    st.write(players_response)
+
+except Exception as e:
+    st.write(e)
 
 players_data = players_response.data
 
