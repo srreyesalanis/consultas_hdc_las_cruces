@@ -18,7 +18,7 @@ st.markdown(
 # --------------------------------------------------
 
 st.set_page_config(
-    page_title="Consulta de Handicap",
+    page_title="Consulta de Handicap - Las Cruces",
     page_icon="⛳",
     layout="centered"
 )
@@ -36,7 +36,7 @@ supabase = create_client(url, key)
 # TITULO
 # --------------------------------------------------
 
-st.title("⛳ Consulta de Handicap")
+st.title("⛳ Consulta de Handicap - Las Cruces")
 st.markdown("Consulta pública de jugadores")
 
 # --------------------------------------------------
