@@ -80,7 +80,7 @@ player_id = selected_player["id"]
 
 handicap = selected_player["current_handicap"]
 
-if handicap is not None:
+if pd.notna(handicap):
 
     st.metric(
         label="Handicap Actual",
@@ -91,7 +91,7 @@ else:
 
     st.metric(
         label="Handicap Actual",
-        value="Faltan Registros"
+        value="N/A"
     )
 
 # --------------------------------------------------
