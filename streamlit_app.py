@@ -151,7 +151,7 @@ if selected_rows:
     # CONSULTA DETALLE
     detail_response = (
         supabase
-        .table("scores")
+        .table("round_holes")
         .select("hole_number, strokes")
         .eq("round_id", round_id)
         .order("hole_number")
