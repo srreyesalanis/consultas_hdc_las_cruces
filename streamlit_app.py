@@ -90,9 +90,9 @@ else:
 rounds_response = (
     supabase
     .table("rounds")
-    .select("date_played, score_differential, adjusted_total")
+    .select("played_at, differential, total_adjusted")
     .eq("player_id", player_id)
-    .order("date_played", desc=True)
+    .order("played_at", desc=True)
     .limit(10)
     .execute()
 )
@@ -106,9 +106,9 @@ if rounds_data:
     rounds_df = pd.DataFrame(rounds_data)
 
     rounds_df = rounds_df.rename(columns={
-        "date_played": "Fecha",
-        "score_differential": "Differential",
-        "adjusted_total": "Score"
+        "played_at": "Fecha",
+        "differential": "Differential",
+        "total_adjusted": "Score"
     })
 
     st.dataframe(
