@@ -69,7 +69,7 @@ player_id = selected_player["id"]
 
 st.metric(
     label="Handicap Actual",
-    value=round(selected_player["handicap_index"], 1)
+    value=round(selected_player["current_handicap"], 1)
 )
 
 # --------------------------------------------------
