@@ -146,7 +146,7 @@ if selected_rows:
     st.subheader(f"Detalle de la ronda - {selected_date}")
 
     # Obtener round_id real
-    round_id = rounds_data[selected_index]["id"]
+    round_id = rounds_data[selected_index]["round_id"]
 
     # CONSULTA DETALLE
     detail_response = (
