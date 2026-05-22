@@ -141,7 +141,7 @@ if selected_rows:
 
     selected_round = rounds_df.iloc[selected_index]
 
-    selected_date = selected_round["id"]
+    selected_date = selected_round["Fecha"]
 
     st.subheader(f"Detalle de la ronda - {selected_date}")
 
