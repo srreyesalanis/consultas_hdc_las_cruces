@@ -101,7 +101,7 @@ else:
 rounds_response = (
     supabase
     .table("rounds")
-    .select("id, played_at, differential, total_adjusted")
+    .select("round_id, played_at, differential, total_adjusted")
     .eq("player_id", player_id)
     .order("played_at", desc=True)
     .limit(10)
