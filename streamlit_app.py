@@ -116,18 +116,22 @@ if rounds_data:
 
     rounds_df = pd.DataFrame(rounds_data)
 
-    rounds_df = rounds_df.rename(columns={
+    # Dataframe visible al usuario
+    display_df = rounds_df.rename(columns={
         "played_at": "Fecha",
         "differential": "Score Diferencial",
         "total_adjusted": "Score Ajustado"
     })
 
+    # Ocultar round_id
+    display_df = display_df.drop(columns=["round_id"])
+
     event = st.dataframe(
-        rounds_df,
-        use_container_width=True,
-        hide_index=True,
-        on_select="rerun",
-        selection_mode="single-row"
+    display_df,
+    use_container_width=True,
+    hide_index=True,
+    on_select="rerun",
+    selection_mode="single-row"
 )
 
 else:
