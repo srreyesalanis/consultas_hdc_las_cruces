@@ -118,8 +118,8 @@ if rounds_data:
 
     rounds_df = rounds_df.rename(columns={
         "played_at": "Fecha",
-        "differential": "Differential",
-        "total_adjusted": "Score"
+        "differential": "Score Diferencial",
+        "total_adjusted": "Score Ajustado"
     })
 
     st.dataframe(
