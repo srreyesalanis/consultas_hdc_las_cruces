@@ -129,13 +129,13 @@ st.subheader("Ranking")
 ranking_df = players_df.copy()
 
 ranking_df = ranking_df.sort_values(
-    by="handicap_index",
+    by="current_handicap",
     ascending=True
 )
 
 ranking_df = ranking_df.rename(columns={
     "name": "Jugador",
-    "handicap_index": "Handicap"
+    "current_handicap": "Handicap"
 })
 
 ranking_df = ranking_df[["Jugador", "Handicap"]]
