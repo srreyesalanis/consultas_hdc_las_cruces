@@ -120,8 +120,8 @@ display_df = rounds_df[[
     "total_adjusted"
 ]].rename(columns={
     "played_at": "Fecha",
-    "differential": "Differential",
-    "total_adjusted": "Score"
+    "differential": "Score Differential",
+    "total_adjusted": "Score Ajustado"
 })
 
 st.subheader("Últimas Rondas")
