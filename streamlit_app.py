@@ -161,24 +161,40 @@ if rounds_data:
 
         detail_data = detail_response.data
 
-        if detail_data:
+    if detail_data:
 
-            detail_df = pd.DataFrame(detail_data)
+        detail_df = pd.DataFrame(detail_data)
 
-            detail_df = detail_df.rename(columns={
-                "hole_number": "Hoyo",
-                "strokes": "Golpes"
-            })
+        detail_df = detail_df.rename(columns={
+            "hole_number": "Hoyo",
+            "strokes": "Golpes"
+        })
+
+        # COLUMNAS PARA CENTRAR
+        left, center, right = st.columns([2, 1, 2])
+
+        with center:
 
             st.dataframe(
                 detail_df,
-                use_container_width=True,
-                hide_index=True
+                hide_index=True,
+                use_container_width=False,
+                width=220,
+                column_config={
+                    "Hoyo": st.column_config.NumberColumn(
+                        "Hoyo",
+                        width="small"
+                    ),
+                    "Golpes": st.column_config.NumberColumn(
+                        "Golpes",
+                        width="small"
+                    )
+                }
             )
 
-        else:
+    else:
 
-            st.info("No existe detalle para esta ronda")
+        st.info("No existe detalle para esta ronda")
 
 
 else:
