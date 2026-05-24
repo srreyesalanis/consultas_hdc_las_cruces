@@ -112,54 +112,41 @@ rounds_data = rounds_response.data
 
 st.subheader("Últimas Rondas")
 
-if rounds_data:
-
-    rounds_df = pd.DataFrame(rounds_data)
-
-    # Dataframe visible al usuario
-    display_df = rounds_df.rename(columns={
-        "played_at": "Fecha",
-        "differential": "Score Diferencial",
-        "total_adjusted": "Score Ajustado"
-    })
-
-    # Ocultar round_id
-    display_df = display_df.drop(columns=["round_id"])
-
-    event = st.dataframe(
-    display_df,
+event = st.dataframe(
+    rounds_df,
     use_container_width=True,
     hide_index=True,
     on_select="rerun",
     selection_mode="single-row"
+)
+
+selected_rows = event.selection
+rounds_df = pd.DataFrame(rounds_data)
+
+if selected_rows["rows"]:
+
+    selected_index = selected_rows["rows"][0]
+
+    selected_round = rounds_df.iloc[selected_index]
+
+    selected_date = selected_round["played_at"]
+
+    st.subheader(f"Detalle de la ronda - {selected_date}")
+
+    # Obtener round_id real
+    round_id = rounds_data[selected_index]["round_id"]
+
+    # CONSULTA DETALLE
+    detail_response = (
+        supabase
+        .table("round_holes")
+        .select("hole_number, strokes")
+        .eq("round_id", round_id)
+        .order("hole_number")
+        .execute()
     )
 
-    selected_rows = event.selection.rows
-
-    if selected_rows:
-
-        selected_index = selected_rows[0]
-
-        selected_round = rounds_df.iloc[selected_index]
-
-        selected_date = selected_round["played_at"]
-
-        st.subheader(f"Detalle de la ronda - {selected_date}")
-
-        # Obtener round_id real
-        round_id = rounds_data[selected_index]["round_id"]
-
-        # CONSULTA DETALLE
-        detail_response = (
-            supabase
-            .table("round_holes")
-            .select("hole_number, strokes")
-            .eq("round_id", round_id)
-            .order("hole_number")
-            .execute()
-        )
-
-        detail_data = detail_response.data
+    detail_data = detail_response.data
 
     if detail_data:
 
@@ -170,7 +157,7 @@ if rounds_data:
             "strokes": "Golpes"
         })
 
-        # COLUMNAS PARA CENTRAR
+        # Centrar tabla
         left, center, right = st.columns([2, 1, 2])
 
         with center:
@@ -195,10 +182,6 @@ if rounds_data:
     else:
 
         st.info("No existe detalle para esta ronda")
-
-
-else:
-    st.info("No existen rondas registradas")
 
 # --------------------------------------------------
 # RANKING
