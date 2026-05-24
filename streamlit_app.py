@@ -72,7 +72,7 @@ selected_player = players_df[
     players_df["name"] == selected_player_name
 ].iloc[0]
 
-player_id = selected_player["id"]
+player_id = selected_player[""]
 
 # --------------------------------------------------
 # HANDICAP ACTUAL
