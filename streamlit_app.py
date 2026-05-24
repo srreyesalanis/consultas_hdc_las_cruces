@@ -110,6 +110,8 @@ rounds_response = (
 
 rounds_data = rounds_response.data
 
+rounds_df = pd.DataFrame(rounds_data)
+
 st.subheader("Últimas Rondas")
 
 event = st.dataframe(
@@ -121,7 +123,7 @@ event = st.dataframe(
 )
 
 selected_rows = event.selection
-rounds_df = pd.DataFrame(rounds_data)
+
 
 if selected_rows["rows"]:
 
