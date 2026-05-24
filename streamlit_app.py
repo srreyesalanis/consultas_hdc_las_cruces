@@ -110,26 +110,24 @@ rounds_response = (
 
 rounds_data = rounds_response.data
 
+# DATAFRAME ORIGINAL
 rounds_df = pd.DataFrame(rounds_data)
 
-# Columnas visibles
-rounds_df = rounds_df[[
+# DATAFRAME SOLO PARA MOSTRAR
+display_df = rounds_df[[
     "played_at",
-    "score_differential",
+    "differential",
     "total_adjusted"
-]]
-
-# Renombrar columnas
-rounds_df = rounds_df.rename(columns={
+]].rename(columns={
     "played_at": "Fecha",
-    "score_differential": "Differential",
+    "differential": "Differential",
     "total_adjusted": "Score"
 })
 
 st.subheader("Últimas Rondas")
 
 event = st.dataframe(
-    rounds_df,
+    display_df,
     use_container_width=True,
     hide_index=True,
     on_select="rerun",
@@ -137,7 +135,6 @@ event = st.dataframe(
 )
 
 selected_rows = event.selection
-
 
 if selected_rows["rows"]:
 
