@@ -120,7 +120,7 @@ display_df = rounds_df[[
     "total_adjusted"
 ]].rename(columns={
     "played_at": "Fecha",
-    "differential": "Score Differential",
+    "differential": "Score Diferencial",
     "total_adjusted": "Score Ajustado"
 })
 
