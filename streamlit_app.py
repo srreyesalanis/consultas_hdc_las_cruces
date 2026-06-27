@@ -69,136 +69,130 @@ selected_player_name = st.selectbox(
     index=None,
     placeholder="Seleccione un jugador..."
 )
-if selected_player_name is None:
-    st.stop()
 
-selected_player = players_df[
-    players_df["name"] == selected_player_name
-].iloc[0]
+if selected_player_name is not None:
 
-player_id = selected_player["id"]
+    selected_player = players_df[
+        players_df["name"] == selected_player_name
+    ].iloc[0]
 
-# --------------------------------------------------
-# HANDICAP ACTUAL
-# --------------------------------------------------
+    player_id = selected_player["id"]
 
-handicap = selected_player["current_handicap"]
+    # Handicap
+    handicap = selected_player["current_handicap"]
 
-if pd.notna(handicap):
+    if pd.notna(handicap):
+        st.metric(
+            label="Handicap Actual",
+            value=round(float(handicap), 1)
+        )
+    else:
+        st.metric(
+            label="Handicap Actual",
+            value="5 (Temporal)"
+        )
 
-    st.metric(
-        label="Handicap Actual",
-        value=round(float(handicap), 1)
-    )
+        # --------------------------------------------------
+        # ULTIMAS RONDAS
+        # --------------------------------------------------
 
-else:
+        rounds_response = (
+            supabase
+            .table("rounds")
+            .select("round_id, played_at, differential, total_adjusted")
+            .eq("player_id", player_id)
+            .order("played_at", desc=True)
+            .limit(10)
+            .execute()
+        )
 
-    st.metric(
-        label="Handicap Actual",
-        value="5 (Temporal)"
-    )
+        rounds_data = rounds_response.data
 
-# --------------------------------------------------
-# ULTIMAS RONDAS
-# --------------------------------------------------
+        # DATAFRAME ORIGINAL
+        rounds_df = pd.DataFrame(rounds_data)
 
-rounds_response = (
-    supabase
-    .table("rounds")
-    .select("round_id, played_at, differential, total_adjusted")
-    .eq("player_id", player_id)
-    .order("played_at", desc=True)
-    .limit(10)
-    .execute()
-)
-
-rounds_data = rounds_response.data
-
-# DATAFRAME ORIGINAL
-rounds_df = pd.DataFrame(rounds_data)
-
-# DATAFRAME SOLO PARA MOSTRAR
-display_df = rounds_df[[
-    "played_at",
-    "differential",
-    "total_adjusted"
-]].rename(columns={
-    "played_at": "Fecha",
-    "differential": "Score Diferencial",
-    "total_adjusted": "Score Ajustado"
-})
-
-st.subheader("Últimas Rondas")
-
-event = st.dataframe(
-    display_df,
-    use_container_width=True,
-    hide_index=True,
-    on_select="rerun",
-    selection_mode="single-row"
-)
-
-selected_rows = event.selection
-
-if selected_rows["rows"]:
-
-    selected_index = selected_rows["rows"][0]
-
-    selected_round = rounds_df.iloc[selected_index]
-
-    selected_date = selected_round["played_at"]
-
-    st.subheader(f"Detalle de la ronda - {selected_date}")
-
-    # Obtener round_id real
-    round_id = rounds_data[selected_index]["round_id"]
-
-    # CONSULTA DETALLE
-    detail_response = (
-        supabase
-        .table("round_holes")
-        .select("hole_number, strokes")
-        .eq("round_id", round_id)
-        .order("hole_number")
-        .execute()
-    )
-
-    detail_data = detail_response.data
-
-    if detail_data:
-
-        detail_df = pd.DataFrame(detail_data)
-
-        detail_df = detail_df.rename(columns={
-            "hole_number": "Hoyo",
-            "strokes": "Golpes"
+        # DATAFRAME SOLO PARA MOSTRAR
+        display_df = rounds_df[[
+            "played_at",
+            "differential",
+            "total_adjusted"
+        ]].rename(columns={
+            "played_at": "Fecha",
+            "differential": "Score Diferencial",
+            "total_adjusted": "Score Ajustado"
         })
 
-        # Centrar tabla
-        left, center, right = st.columns([2, 1, 2])
+        st.subheader("Últimas Rondas")
 
-        with center:
+        event = st.dataframe(
+            display_df,
+            use_container_width=True,
+            hide_index=True,
+            on_select="rerun",
+            selection_mode="single-row"
+        )
 
-            st.dataframe(
-                detail_df,
-                hide_index=True,
-                use_container_width=False,
-                width=220,
-                column_config={
-                    "Hoyo": st.column_config.NumberColumn(
-                        "Hoyo",
-                        width="small"
-                    ),
-                    "Golpes": st.column_config.NumberColumn(
-                        "Golpes",
-                        width="small"
-                    )
-                }
+        selected_rows = event.selection
+
+        if selected_rows["rows"]:
+
+            selected_index = selected_rows["rows"][0]
+
+            selected_round = rounds_df.iloc[selected_index]
+
+            selected_date = selected_round["played_at"]
+
+            st.subheader(f"Detalle de la ronda - {selected_date}")
+
+            # Obtener round_id real
+            round_id = rounds_data[selected_index]["round_id"]
+
+            # CONSULTA DETALLE
+            detail_response = (
+                supabase
+                .table("round_holes")
+                .select("hole_number, strokes")
+                .eq("round_id", round_id)
+                .order("hole_number")
+                .execute()
             )
 
-    else:
+            detail_data = detail_response.data
 
-        st.info("No existe detalle para esta ronda")
+            if detail_data:
+
+                detail_df = pd.DataFrame(detail_data)
+
+                detail_df = detail_df.rename(columns={
+                    "hole_number": "Hoyo",
+                    "strokes": "Golpes"
+                })
+
+                # Centrar tabla
+                left, center, right = st.columns([2, 1, 2])
+
+                with center:
+
+                    st.dataframe(
+                        detail_df,
+                        hide_index=True,
+                        use_container_width=False,
+                        width=220,
+                        column_config={
+                            "Hoyo": st.column_config.NumberColumn(
+                                "Hoyo",
+                                width="small"
+                            ),
+                            "Golpes": st.column_config.NumberColumn(
+                                "Golpes",
+                                width="small"
+                            )
+                        }
+                    )
+
+            else:
+
+                st.info("No existe detalle para esta ronda")
 
 # --------------------------------------------------
 # RANKING
