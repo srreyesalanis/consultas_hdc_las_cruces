@@ -65,8 +65,12 @@ players_df = pd.DataFrame(players_data)
 
 selected_player_name = st.selectbox(
     "Selecciona un jugador",
-    players_df["name"]
+    players_df["name"],
+    index=None,
+    placeholder="Seleccione un jugador..."
 )
+if selected_player_name is None:
+    st.stop()
 
 selected_player = players_df[
     players_df["name"] == selected_player_name
