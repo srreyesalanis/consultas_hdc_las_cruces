@@ -200,30 +200,30 @@ if selected_player_name is not None:
 
 st.subheader("Ranking")
 
-ranking_df = players_df.copy()
-
-ranking_df = ranking_df.sort_values(
-    by="current_handicap",
-    ascending=True
+ranking_df = (
+    players_df
+    .dropna(subset=["current_handicap"])
+    .sort_values(by="current_handicap", ascending=True)
+    .reset_index(drop=True)
 )
+
+ranking_df["Ranking"] = ranking_df.index + 1
 
 ranking_df = ranking_df.rename(columns={
     "name": "Jugador",
     "current_handicap": "Handicap"
 })
 
-ranking_df = ranking_df[["Jugador", "Handicap"]]
+ranking_df["Handicap"] = ranking_df["Handicap"].round(1)
 
-ranking_df.index = ranking_df.index + 1
+ranking_df = ranking_df[[
+    "Ranking",
+    "Jugador",
+    "Handicap"
+]]
 
 st.dataframe(
     ranking_df,
-    use_container_width=True
+    use_container_width=True,
+    hide_index=True
 )
-
-# --------------------------------------------------
-# FOOTER
-# --------------------------------------------------
-
-st.markdown("---")
-st.caption("Sistema público de consulta de handicap")
