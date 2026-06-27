@@ -64,7 +64,7 @@ players_df = pd.DataFrame(players_data)
 # --------------------------------------------------
 
 selected_player_name = st.selectbox(
-    "Selecciona un jugador",
+    "Ver detalle de rondas de un jugador",
     players_df["name"],
     index=None,
     placeholder="Seleccione un jugador..."
