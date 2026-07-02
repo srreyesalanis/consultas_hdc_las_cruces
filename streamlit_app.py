@@ -161,32 +161,39 @@ if selected_player_name is not None:
 
         if detail_data:
 
-            detail_df = pd.DataFrame(detail_data)
-
-            detail_df = detail_df.rename(columns={
+            detail_df = pd.DataFrame(detail_data).rename(columns={
                 "hole_number": "Hoyo",
                 "strokes": "Golpes"
             })
 
+            # Agregar fila total Front (despues del hoyo 9)
+            front_df = detail_df[detail_df["Hoyo"] <= 9]
+            back_df  = detail_df[detail_df["Hoyo"] >= 10]
+
+            front_total = pd.DataFrame([{"Hoyo": "Front", "Golpes": front_df["Golpes"].sum()}])
+            back_total  = pd.DataFrame([{"Hoyo": "Back",  "Golpes": back_df["Golpes"].sum()}])
+            total_row   = pd.DataFrame([{"Hoyo": "Total", "Golpes": detail_df["Golpes"].sum()}])
+
+            display_detail = pd.concat([
+                front_df,
+                front_total,
+                back_df,
+                back_total,
+                total_row
+            ], ignore_index=True)
+
             # Centrar tabla
-            left, center, right = st.columns([2, 1, 2])
+            left, center, right = st.columns([1, 2, 1])
 
             with center:
 
                 st.dataframe(
-                    detail_df,
+                    display_detail,
                     hide_index=True,
-                    use_container_width=False,
-                    width=220,
+                    use_container_width=True,
                     column_config={
-                        "Hoyo": st.column_config.NumberColumn(
-                            "Hoyo",
-                            width="small"
-                        ),
-                        "Golpes": st.column_config.NumberColumn(
-                            "Golpes",
-                            width="small"
-                        )
+                        "Hoyo": st.column_config.TextColumn("Hoyo", width="small"),
+                        "Golpes": st.column_config.NumberColumn("Golpes", width="small")
                     }
                 )
 
