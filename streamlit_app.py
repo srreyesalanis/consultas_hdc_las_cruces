@@ -195,6 +195,53 @@ if selected_player_name is not None:
             st.info("No existe detalle para esta ronda")
 
 # --------------------------------------------------
+# GRAFICA EVOLUCION HANDICAP
+# --------------------------------------------------
+
+    if selected_player_name is not None:
+
+        st.subheader("Evolución del Handicap")
+
+        hdc_history = (
+            supabase
+            .table("rounds")
+            .select("played_at, differential")
+            .eq("player_id", player_id)
+            .order("played_at", desc=False)
+            .execute()
+        )
+
+        hdc_df = pd.DataFrame(hdc_history.data).dropna(subset=["differential"])
+
+        if len(hdc_df) >= 2:
+            import plotly.graph_objects as go
+
+            hdc_df["played_at"] = pd.to_datetime(hdc_df["played_at"])
+            hdc_df["differential"] = hdc_df["differential"].astype(float).round(2)
+
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(
+                x=hdc_df["played_at"],
+                y=hdc_df["differential"],
+                mode="lines+markers",
+                line=dict(color="#2E86AB", width=2),
+                marker=dict(size=7, color="#2E86AB"),
+                hovertemplate="<b>%{x|%d %b %Y}</b><br>Diferencial: %{y}<extra></extra>"
+            ))
+            fig.update_layout(
+                xaxis_title="Fecha",
+                yaxis_title="Diferencial",
+                margin=dict(l=10, r=10, t=10, b=10),
+                height=300,
+                hovermode="x unified"
+            )
+            st.plotly_chart(fig, use_container_width=True)
+        elif len(hdc_df) == 1:
+            st.info("Se necesitan al menos 2 rondas para mostrar la gráfica.")
+        else:
+            st.info("Sin rondas con diferencial registrado.")
+
+# --------------------------------------------------
 # RANKING
 # --------------------------------------------------
 
