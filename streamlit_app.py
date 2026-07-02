@@ -231,11 +231,17 @@ if selected_player_name is not None:
                 hovertemplate="<b>%{x|%d %b %Y}</b><br>Handicap: %{y}<extra></extra>"
             ))
             fig.update_layout(
-                xaxis_title="Fecha",
+                xaxis_title="",
                 yaxis_title="Handicap Index",
-                margin=dict(l=10, r=10, t=10, b=10),
-                height=300,
-                hovermode="x unified"
+                margin=dict(l=10, r=10, t=10, b=60),
+                height=320,
+                hovermode="x unified",
+                xaxis=dict(
+                    tickformat="%d/%m/%y",
+                    tickangle=-90,
+                    tickmode="array",
+                    tickvals=hdc_df["calculated_at"]
+                )
             )
             st.plotly_chart(fig, use_container_width=True)
         else:
