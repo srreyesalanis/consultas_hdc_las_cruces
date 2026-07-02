@@ -222,10 +222,12 @@ if selected_player_name is not None:
             hdc_df["fecha_str"] = hdc_df["calculated_at"].dt.strftime("%d %b %Y")
 
             fig = go.Figure()
-            fig.add_trace(go.Bar(
+            fig.add_trace(go.Scatter(
                 x=hdc_df["calculated_at"],
                 y=hdc_df["handicap_index"],
-                marker_color="#2E86AB",
+                mode="lines+markers",
+                line=dict(color="#2E86AB", width=2),
+                marker=dict(size=7, color="#2E86AB"),
                 hovertemplate="<b>%{x|%d %b %Y}</b><br>Handicap: %{y}<extra></extra>"
             ))
             fig.update_layout(
@@ -233,7 +235,7 @@ if selected_player_name is not None:
                 yaxis_title="Handicap Index",
                 margin=dict(l=10, r=10, t=10, b=10),
                 height=300,
-                bargap=0.3
+                hovermode="x unified"
             )
             st.plotly_chart(fig, use_container_width=True)
         else:
