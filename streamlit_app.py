@@ -213,7 +213,8 @@ if selected_player_name is not None:
             .execute()
         )
 
-        hdc_df = pd.DataFrame(hdc_history.data).dropna(subset=["handicap_index"])
+        hdc_raw = pd.DataFrame(hdc_history.data)
+        hdc_df = hdc_raw.dropna(subset=["handicap_index"]) if "handicap_index" in hdc_raw.columns else pd.DataFrame()
 
         if len(hdc_df) >= 1:
             hdc_df["calculated_at"] = pd.to_datetime(hdc_df["calculated_at"])
