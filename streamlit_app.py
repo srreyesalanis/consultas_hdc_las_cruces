@@ -187,8 +187,15 @@ if selected_player_name is not None:
 
             with center:
 
+                bold_rows = display_detail.index[display_detail["Hoyo"].isin(["Front", "Back", "Total"])].tolist()
+
+                def highlight_totals(row):
+                    if row.name in bold_rows:
+                        return ["font-weight: bold"] * len(row)
+                    return [""] * len(row)
+
                 st.dataframe(
-                    display_detail,
+                    display_detail.style.apply(highlight_totals, axis=1),
                     hide_index=True,
                     use_container_width=True,
                     column_config={
