@@ -113,6 +113,8 @@ if selected_player_name is not None:
     rounds_df = pd.DataFrame(rounds_data)
 
     # DATAFRAME SOLO PARA MOSTRAR
+    rounds_df["differential"] = rounds_df["differential"].round(1)
+
     display_df = rounds_df[[
         "played_at",
         "differential",
