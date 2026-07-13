@@ -143,7 +143,10 @@ if selected_player_name is not None:
         use_container_width=True,
         hide_index=True,
         on_select="rerun",
-        selection_mode="single-row"
+        selection_mode="single-row",
+        column_config={
+            "Score Diferencial": st.column_config.NumberColumn(format="%.1f"),
+        }
     )
 
     selected_rows = event.selection
