@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from supabase import create_client
+from fpdf import FPDF
 
 st.markdown(
     """
@@ -293,4 +294,45 @@ st.dataframe(
     ranking_df,
     use_container_width=True,
     hide_index=True
+)
+
+# --------------------------------------------------
+# BOTON DESCARGAR PDF
+# --------------------------------------------------
+
+def generar_pdf_ranking(df):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Helvetica", "B", 16)
+    pdf.cell(0, 10, "Las Cruces - Ranking de Handicap", ln=True, align="C")
+    pdf.ln(4)
+    pdf.set_font("Helvetica", "B", 10)
+    pdf.set_fill_color(34, 139, 34)
+    pdf.set_text_color(255, 255, 255)
+    pdf.cell(25, 8, "#", border=1, fill=True, align="C")
+    pdf.cell(120, 8, "Jugador", border=1, fill=True, align="C")
+    pdf.cell(35, 8, "Handicap", border=1, fill=True, align="C")
+    pdf.ln()
+    pdf.set_font("Helvetica", "", 10)
+    pdf.set_text_color(0, 0, 0)
+    for i, row in df.iterrows():
+        fill = i % 2 == 0
+        if fill:
+            pdf.set_fill_color(240, 248, 240)
+        else:
+            pdf.set_fill_color(255, 255, 255)
+        pdf.cell(25, 7, str(int(row["Ranking"])), border=1, fill=fill, align="C")
+        pdf.cell(120, 7, str(row["Jugador"]), border=1, fill=fill)
+        pdf.cell(35, 7, str(row["Handicap"]), border=1, fill=fill, align="C")
+        pdf.ln()
+    return bytes(pdf.output())
+
+pdf_bytes = generar_pdf_ranking(ranking_df)
+
+st.download_button(
+    label="⬇️ Descargar Ranking PDF",
+    data=pdf_bytes,
+    file_name="ranking_las_cruces.pdf",
+    mime="application/pdf",
+    use_container_width=True
 )
