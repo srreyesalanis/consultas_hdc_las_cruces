@@ -125,8 +125,19 @@ if selected_player_name is not None:
 
     st.subheader("Últimas Rondas")
 
+    # Identificar las 8 mejores diferenciales (usadas para el cálculo)
+    if "differential" in rounds_df.columns and rounds_df["differential"].notna().sum() > 0:
+        best_8_idx = rounds_df["differential"].nsmallest(8).index
+    else:
+        best_8_idx = []
+
+    def highlight_best(row):
+        if row.name in best_8_idx:
+            return ["background-color: #c8f7c5; color: #1a7a1a; font-weight: bold"] * len(row)
+        return [""] * len(row)
+
     event = st.dataframe(
-        display_df,
+        display_df.style.apply(highlight_best, axis=1),
         use_container_width=True,
         hide_index=True,
         on_select="rerun",
