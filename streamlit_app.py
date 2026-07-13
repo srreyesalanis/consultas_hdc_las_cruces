@@ -103,7 +103,7 @@ if selected_player_name is not None:
         .select("round_id, played_at, differential, total_adjusted")
         .eq("player_id", player_id)
         .order("played_at", desc=True)
-        .limit(10)
+        .limit(20)
         .execute()
     )
 
