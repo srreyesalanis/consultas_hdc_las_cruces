@@ -130,7 +130,13 @@ if selected_player_name is not None:
     # Identificar las mejores rondas usadas para el cálculo (según tabla de tarjetas)
     if "differential" in rounds_df.columns and rounds_df["differential"].notna().sum() > 0:
         n_rounds = rounds_df["differential"].notna().sum()
-        if n_rounds == 8:
+        if n_rounds < 3:
+            best_count = 0
+        elif n_rounds <= 5:
+            best_count = 1
+        elif n_rounds <= 7:
+            best_count = 2
+        elif n_rounds == 8:
             best_count = 2
         elif n_rounds <= 11:
             best_count = 3
