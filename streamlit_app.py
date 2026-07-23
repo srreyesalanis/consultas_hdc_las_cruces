@@ -79,20 +79,6 @@ if selected_player_name is not None:
 
     player_id = selected_player["id"]
 
-    # Handicap
-    handicap = selected_player["current_handicap"]
-
-    if pd.notna(handicap):
-        st.metric(
-            label="Handicap Actual",
-            value=round(float(handicap), 1)
-        )
-    else:
-        st.metric(
-            label="Handicap Actual",
-            value="5 (Temporal)"
-        )
-
     # --------------------------------------------------
     # ULTIMAS RONDAS
     # --------------------------------------------------
@@ -108,6 +94,22 @@ if selected_player_name is not None:
     )
 
     rounds_data = rounds_response.data
+    n_total_rounds = len(rounds_data)
+
+    # Handicap
+    handicap = selected_player["current_handicap"]
+
+    if pd.notna(handicap):
+        hdc_label = "Handicap Actual" if n_total_rounds >= 20 else "Handicap (Temporal)"
+        st.metric(
+            label=hdc_label,
+            value=round(float(handicap), 1)
+        )
+    else:
+        st.metric(
+            label="Handicap Actual",
+            value="Sin datos suficientes"
+        )
 
     # DATAFRAME ORIGINAL
     rounds_df = pd.DataFrame(rounds_data)
