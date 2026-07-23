@@ -127,9 +127,24 @@ if selected_player_name is not None:
 
     st.subheader("Últimas Rondas")
 
-    # Identificar las 8 mejores diferenciales (usadas para el cálculo)
+    # Identificar las mejores rondas usadas para el cálculo (según tabla de tarjetas)
     if "differential" in rounds_df.columns and rounds_df["differential"].notna().sum() > 0:
-        best_8_idx = rounds_df["differential"].nsmallest(8).index
+        n_rounds = rounds_df["differential"].notna().sum()
+        if n_rounds == 8:
+            best_count = 2
+        elif n_rounds <= 11:
+            best_count = 3
+        elif n_rounds <= 14:
+            best_count = 4
+        elif n_rounds <= 16:
+            best_count = 5
+        elif n_rounds <= 18:
+            best_count = 6
+        elif n_rounds == 19:
+            best_count = 7
+        else:
+            best_count = 8
+        best_8_idx = rounds_df["differential"].nsmallest(best_count).index
     else:
         best_8_idx = []
 
